@@ -18,3 +18,5 @@ clean-targets:
 
 models:
   +materialized: table
+  +pre_hook:
+    - "select http_set_curlopt('CURLOPT_TIMEOUT', '20')"
