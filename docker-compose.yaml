@@ -6,12 +6,14 @@ services:
     restart: always
     ports:
     - 5432:5432
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
 
-      JIRA_CONFIG:
+    environment:
+    - POSTGRES_HOST_AUTH_METHOD=trust
+    - JIRA_CONFIG
+    - GMAIL_CONFIG
 
     command: [
       postgres,
       -c, "dbt_personal.jira_config=${JIRA_CONFIG}",
+      -c, "dbt_personal.gmail_config=${GMAIL_CONFIG}",
     ]
