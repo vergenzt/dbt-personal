@@ -8,6 +8,6 @@ docker:
       user: postgres
       pass: ''
       dbname: postgres
-      schema: public
+      schema: dbt_personal
 
   target: dev

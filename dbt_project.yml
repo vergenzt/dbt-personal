@@ -4,7 +4,7 @@ config-version: 2
 
 profile: 'docker'
 
-model-paths: ["models"]
+model-paths: ["models", "functions"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
 seed-paths: ["seeds"]
@@ -17,6 +17,13 @@ clean-targets:
   - "dbt_packages"
 
 models:
-  +materialized: table
-  +pre_hook:
-    - "select http_set_curlopt('CURLOPT_TIMEOUT', '20')"
+  dbt_personal:
+    functions:
+      +materialized: function
+
+    relations:
+      +materialized: table
+      +pre_hook:
+        - "select http_set_curlopt('CURLOPT_TIMEOUT', '20')"
+        - "select http_set_curlopt('CURLOPT_TCP_KEEPALIVE', '20')"
+
