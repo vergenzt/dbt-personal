@@ -13,7 +13,7 @@ select
 
 from
 
-  {{ ref('jira_paginate') }}(
+  {{ ref('jira_paginate_fn') }}(
     'GET', '/search', 'issues',
     json_build_object(
       'fields', '*all',
