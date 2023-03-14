@@ -18,12 +18,8 @@ clean-targets:
 
 models:
   dbt_personal:
-    functions:
-      +materialized: function
-
-    relations:
-      +materialized: table
-      +pre_hook:
-        - "select http_set_curlopt('CURLOPT_TIMEOUT', '20')"
-        - "select http_set_curlopt('CURLOPT_TCP_KEEPALIVE', '20')"
+    +materialized: table
+    +pre_hook:
+      - "select http_set_curlopt('CURLOPT_TIMEOUT', '20')"
+      - "select http_set_curlopt('CURLOPT_TCP_KEEPALIVE', '20')"
 

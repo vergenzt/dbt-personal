@@ -1,3 +1,5 @@
+{{ config(materialized='function') -}}
+
 (service text, method http_method, path text, args json = null)
 returns http_response
 language plpgsql
@@ -8,8 +10,8 @@ as $$
     fullpath text := concat(
       settings->>'base_url',
       path,
-      case lower(method)
-        when 'get' then coalesce('?' || urlencode(args::jsonb), '')
+      case when lower(method) = 'get' and args is not null
+        then coalesce('?' || urlencode(args::jsonb), '')
         else ''
       end
     );
@@ -38,7 +40,8 @@ as $$
     select * from http(request) into response;
 
     if response.status >= 400 then
-      raise 'Request returned status code %', response.status;
+      raise 'Request returned status code %\n\n%', response.status, response.content;
+      
     end if;
 
     return response;

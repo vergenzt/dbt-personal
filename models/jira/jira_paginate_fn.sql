@@ -1,3 +1,5 @@
+{{ config(materialized='function') -}}
+
 (method http_method, path text, response_key text, args json)
 returns setof json
 language plpgsql
@@ -12,7 +14,7 @@ as $$
   begin
     loop
 
-      select * from {{ ref('_http') }}('jira', method, path, args) into response;
+      select * from {{ ref('http_fn') }}('jira', method, path, args) into response;
       resp := response.content;
       start_at := coalesce((args->>'startAt')::int, 0);
       page_size := json_array_length(resp->response_key);

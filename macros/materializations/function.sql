@@ -1,7 +1,7 @@
 {% materialization function, adapter='postgres' %}
   {%- call statement('main') -%}
 
-    drop function {{ this }};
+    drop function if exists {{ this }} cascade;
 
     create function {{ this }} {{- sql }}
 
