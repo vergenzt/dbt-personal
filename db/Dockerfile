@@ -8,6 +8,7 @@ RUN apt update \
       libcurl4-openssl-dev \
       make \
       postgresql-server-dev-${PG_MAJOR} \
+      postgresql-plpython3-${PG_MAJOR} \
       --
 
 ARG PG_HTTP_VERSION=1.5.0
@@ -21,4 +22,7 @@ RUN cd /root \
  && cd pgsql-http-${PG_HTTP_VERSION} \
  && make \
  && make install \
- && echo "create extension http;" > /docker-entrypoint-initdb.d/pgsql-http-init.sql
+ && { \
+      echo "create extension http;"; \
+      echo "create extension plpython3u;"; \
+    } > /docker-entrypoint-initdb.d/extensions-init.sql

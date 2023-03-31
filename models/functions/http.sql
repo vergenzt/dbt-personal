@@ -5,6 +5,7 @@ returns http_response
 language plpgsql
 as $$
   declare
+
     settings json := current_setting('{{ project_name }}.' || service || '_config');
 
     fullpath text := concat(
@@ -41,7 +42,6 @@ as $$
 
     if response.status >= 400 then
       raise 'Request returned status code %\n\n%', response.status, response.content;
-      
     end if;
 
     return response;

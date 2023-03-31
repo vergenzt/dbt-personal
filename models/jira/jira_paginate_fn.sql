@@ -14,7 +14,7 @@ as $$
   begin
     loop
 
-      select * from {{ ref('http_fn') }}('jira', method, path, args) into response;
+      select * from {{ ref('http') }}('jira', method, path, args) into response;
       resp := response.content;
       start_at := coalesce((args->>'startAt')::int, 0);
       page_size := json_array_length(resp->response_key);

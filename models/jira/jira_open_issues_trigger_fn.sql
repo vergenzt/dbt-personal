@@ -22,7 +22,7 @@ begin
     select
       issue.*
     from
-      {{ ref('http_fn') }}(
+      {{ ref('http') }}(
         'jira',
         case tg_op
           when 'INSERT' then 'POST'
@@ -37,7 +37,7 @@ begin
 
       json_to_record(update_resp.content::json) as issue_meta(id text, key text),
 
-      {{ ref('http_fn') }}('jira', 'GET', '/issue/' || case when tg_op = 'INSERT' then issue_meta.id else old.id end, json_build_object('fields', '*all')) as get_resp,
+      {{ ref('http') }}('jira', 'GET', '/issue/' || case when tg_op = 'INSERT' then issue_meta.id else old.id end, json_build_object('fields', '*all')) as get_resp,
 
       json_to_record(get_resp.content::json) as issue(id text, key text, fields json)
 
@@ -50,14 +50,14 @@ begin
     select
       issue.*
     from
-      {{ ref('http_fn') }}(
+      {{ ref('http') }}(
         'jira', 'PUT', '/issue/' || old.id,
         json_build_object('fields', json_build_object('status', json_build_object
           'id': 
         ))
       ) as put_resp,
       json_to_record(put_resp.content::json) as issue_meta(id text, key text),
-      {{ ref('http_fn') }}('jira', 'GET', '/issue/' || issue_meta.id, json_build_object('fields', '*all')) as get_resp,
+      {{ ref('http') }}('jira', 'GET', '/issue/' || issue_meta.id, json_build_object('fields', '*all')) as get_resp,
       json_to_record(get_resp.content::json) as issue(id text, key text, fields json)
 
     into new;
